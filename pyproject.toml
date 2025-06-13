@@ -1,0 +1,11 @@
+[build-system]
+requires = ["setuptools"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ms_file_reader"
+version = "0.0.1"
+authors = [{name = "Gregory Janesch"}]
+description = "Reads a few common file formats for processed mass spectra and generates consistent objects from them."
+license = "MIT"
+dependencies = ["numpy"]
