@@ -57,7 +57,7 @@ class MassSpectrumLibrary():
     
     def count_field_values(self, field_name):
         """
-        Returns a list of all values found in the specified field.  Spectra without the field will have None as their value.
+        Returns a list of all values found in the specified field.  Note that spectra without the field and spectra with the field but with a null value will be counted together under the 'None' key.
         """
         values = [s.fields.get(field_name, None) for s in self.spectra]
         return Counter(values)
@@ -65,15 +65,16 @@ class MassSpectrumLibrary():
 
 class MassSpectrumFileProcessor():
     """
-    Class containing common operations for mass spectrum file processors.
+    Class containing common operations for mass spectrum file processors.  Children of this class are intended to be file type readers.
         
     Leaving the delimiter as None will split on arbitrary whitespace.
     """
 
-    def __init__(self, peak_delimiter=None, mz_field=0, intensity_field=1):
+    def __init__(self, peak_delimiter=None, mz_field=0, intensity_field=1, max_intensity=None):
         self.mz_field = mz_field
         self.intensity_field = intensity_field
         self.peak_delimiter = peak_delimiter
+        self.max_intensity = max_intensity
 
     def _process_spectrum_lines(self, spectrum_lines, peak_delimiter=None):
         """

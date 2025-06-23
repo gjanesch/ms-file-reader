@@ -12,9 +12,6 @@ def quick_test_library():
         MassSpectrum({"F1": "No", "F3": "Yes"}, np.array([[40,100]]))
     ])
 
-def test_test():
-    assert 1 == 1
-
 def test_spectrum_rescale():
     test_spectrum = MassSpectrum({}, np.array([[1,5],[2,10],[3,1]]))
     test_spectrum.rescale_spectrum(100)
@@ -28,14 +25,13 @@ def test_field_value_count(quick_test_library):
     counts = quick_test_library.count_field_values("F3")
     assert counts == {"Dunno": 2, "Yes": 1, None: 1}
 
-
 def test_processor_good_input():
     good_input = ["1 14 9.7", "2 24 13.8", "5 33 16.9"]
     processor = MassSpectrumFileProcessor(mz_field=0, intensity_field=2)
     spectrum = processor._process_spectrum_lines(good_input)
     assert np.all(spectrum == np.array([[1, 9.7], [2, 13.8], [5, 16.9]]))
 
-def test_processor_bad_input():
+def test_processor_bad_number_of_entries():
     bad_input = ["1 14 9.7", "2 24", "5 33 16.9"]
     processor = MassSpectrumFileProcessor(mz_field=0, intensity_field=2)
     with pytest.raises(ValueError):

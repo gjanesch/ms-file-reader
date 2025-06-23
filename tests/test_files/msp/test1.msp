@@ -1,0 +1,50 @@
+Name: Substance 1
+PrecursorMZ: 105.00
+Formula: C8H8
+InChIKey: KWPFRDMANMIKER-QLOPDEFERO-C
+Ion Mode: Positive
+Num_Peaks: 10
+10  230
+22  438
+23  66
+45  115
+46  116
+47  12
+99  9
+100  110
+102  55
+103  33
+
+
+Name: Substance 2
+PrecursorMZ: 500.00
+Formula: C10H12O3
+InChIKey: QWERTYUIOPASDF-GHJKLZXCVB-N
+Ion Mode: Positive
+Num_Peaks: 8
+100  45
+150  92
+200  68
+250  33
+300  12
+350  55
+400  27
+450  8
+
+
+NAME: Substance 3
+FORMULA: C12H14N2O4
+InChIKey:
+Ion Mode: Unknown
+Num_Peaks: 11
+85   41
+120  115
+175  9
+210  60
+245  2
+290  52
+320  18
+360  180
+400  35
+450  1
+500  5
