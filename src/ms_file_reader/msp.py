@@ -55,7 +55,7 @@ class MSPFileProcessor(MassSpectrumFileProcessor):
                         # field doesn't have a value, but its existence should be included
                         fields[field_name.strip()] = None
                     else:
-                        # no value, don't want the entry
+                        # field doesn't have a value, and don't want the entry
                         pass
                 else:
                     warnings.warn(f"Line with un-delimited content '{l}' found.")
