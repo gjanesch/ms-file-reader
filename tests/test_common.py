@@ -3,8 +3,8 @@ import pytest
 
 from ms_file_reader.common_ms import MassSpectrum, MassSpectrumLibrary, MassSpectrumFileProcessor
 
-@pytest.fixture(scope="module")
-def quick_test_library():
+@pytest.fixture(name="quick_test_library", scope="module")
+def quick_test_library_fixture():
     return MassSpectrumLibrary([
         MassSpectrum({"F1": "Yes", "F2": "Yes", "F3": "Dunno"}, np.array([[10,10]])),
         MassSpectrum({"F1": "Yes", "F2": "Yes"}, np.array([[20,200]])),

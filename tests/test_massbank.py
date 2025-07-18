@@ -7,9 +7,12 @@ import pytest
 from ms_file_reader.massbank import MassBankFileProcessor
 
 
-@pytest.fixture
-def good_test_file1():
-    with open("tests/test_files/massbank/MSBNK-UvA_IBED-UI000101.txt", "r") as f:
+@pytest.fixture(name="good_test_file1")
+def good_test_file1_fixture():
+    """
+    Loads file test file pulled from MassBank EU's data repository.
+    """
+    with open("tests/test_files/massbank/MSBNK-UvA_IBED-UI000101.txt", "r", encoding="utf-8") as f:
         return f.read()
 
 

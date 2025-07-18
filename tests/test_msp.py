@@ -7,9 +7,9 @@ import pytest
 from ms_file_reader.msp import MSPFileProcessor
 
 
-@pytest.fixture
-def good_test_file():
-    with open("tests/test_files/msp/test1.msp", "r") as f:
+@pytest.fixture(name="good_test_file")
+def good_test_file_fixture():
+    with open("tests/test_files/msp/test1.msp", "r", encoding="utf-8") as f:
         return f.read()
 
 def test_read_good_file(good_test_file):

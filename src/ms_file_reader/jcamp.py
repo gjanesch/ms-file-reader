@@ -1,36 +1,63 @@
 """
-Functions for processing for JCAMP-DX files.  These files come in a variety of
-file extenstions, including .hpj and .jdx, but they all have essentially the
-same structure.
+Functions for processing for JCAMP-DX files.  These files come in a variety of file extensions,
+including .hpj and .jdx, but they all have essentially the same structure.
 
-I'm basing this code off of the contents of the paper "JCAMP-DX" for Mass Spectrometry" by Lampen, et al (1994).
+I'm basing this code off of the contents of the paper "JCAMP-DX" for Mass Spectrometry" by Lampen,
+et al (1994).
 """
 
 import warnings
+
+import numpy as np
 
 from ms_file_reader.common_ms import MassSpectrum, MassSpectrumFileProcessor, MassSpectrumLibrary
 
 
 class JCAMPFileProcessor(MassSpectrumFileProcessor):
     """
-    Class used to process a JCAMP-DX style file and output a library of spectra.
+    Class used to process a mass spectral file in the JCAMP-DX format and output a library of
+    spectra.
 
-    keep_symbol_prefixes is for whether to include '.' or '$' prefixes on field names (the specification that I used mentions them )
+    Arguments:
+    - interpeak_delimiter -- Delimiter that goes between m/z-intensity pairs, e.g. "40 100; 50 88".
+    Not necessary for all JCAMP-DX files.
+    - keep_empty_fields -- Boolean to choose whether to keep fields without values.  If True, fields
+    that are empty in the file will have a value of None in the mass spectrum's field dictionary; if
+    False, they won't appear in the dictionary at all.
+    - keep_symbol_prefixes -- Whether to include '.' or '$' prefixes on field names, which may
+    precede custom field names according to the specification.
+    - max_intensity -- If supplied, all spectra in the library will have their peaks' intensities
+    rescaled so that max_intensity is the largest value.
+    - peak_delimiter -- Delimiter between the m/z and intensity values for a peak.  Leaving as None
+    splits on any non-line-breaking whitespace.
+    - spectrum_delimiter -- Delimiter between individual spectra in the file.
     """
 
-    def __init__(self, peak_delimiter=None, max_intensity=None, keep_empty_fields=True, keep_symbol_prefixes=True, interpeak_delimiter=";", spectrum_delimiter=None):
-        super().__init__(intensity_field=1, mz_field=0, peak_delimiter=peak_delimiter, max_intensity=max_intensity)
+    def __init__(
+        self,
+        interpeak_delimiter=";",
+        keep_empty_fields=True,
+        keep_symbol_prefixes=True,
+        max_intensity=None,
+        peak_delimiter=None,
+        spectrum_delimiter=None
+    ):
+        super().__init__(intensity_field=1, max_intensity=max_intensity, mz_field=0, peak_delimiter=peak_delimiter)
         self.keep_symbol_prefixes = keep_symbol_prefixes
         self.keep_empty_fields = keep_empty_fields
         self.interpeak_delimiter = interpeak_delimiter
         self.spectrum_delimiter = spectrum_delimiter
-    
+
 
     def process_file(self, file_text):
+        """
+        Processes the text of a JCAMP-DX file into a library of mass spectra.  Outputs a
+        MassSpectrumLibrary object containing the file's spectra.
+        """
         spectrum_texts = self._split_spectra(file_text)
         spectrum_object_list = []
 
-        for text in spectrum_texts:
+        for i, text in enumerate(spectrum_texts):
             spectrum_start_line = 0
             num_peaks = 0
             fields = {}
@@ -64,7 +91,7 @@ class JCAMPFileProcessor(MassSpectrumFileProcessor):
                     warnings.warn(f"Line with non-standard content found: '{l}'")
 
             if num_peaks == 0:
-                warnings.warn(f"No spectrum found in text for spectrum number {n+1}.")
+                warnings.warn(f"No spectrum found in text for spectrum number {i+1}.")
                 spectrum = np.empty((0,2))
             elif self.interpeak_delimiter in lines[spectrum_start_line]:
                 all_peaks = []
@@ -74,40 +101,43 @@ class JCAMPFileProcessor(MassSpectrumFileProcessor):
                         all_peaks.extend(line_peaks)
                     else:
                         break
-                spectrum = self._process_spectrum_lines(all_peaks, self.peak_delimiter)
+                spectrum = self._process_spectrum_lines(all_peaks)
             else:
                 spectrum_lines = lines[spectrum_start_line:(spectrum_start_line + num_peaks)]
-                spectrum = self._process_spectrum_lines(spectrum_lines, self.peak_delimiter)
+                spectrum = self._process_spectrum_lines(spectrum_lines)
 
             spectrum_object = MassSpectrum(fields=fields, spectrum=spectrum)
             if self.max_intensity:
                 spectrum_object.rescale_spectrum(self.max_intensity)
 
             spectrum_object_list.append(MassSpectrum(fields=fields, spectrum=spectrum))
-    
+
         return MassSpectrumLibrary(spectrum_object_list)
-            
+
 
 
     def _split_spectra(self, file_text):
         """
-        Spectra in a JCAMP-DX file typically start with a line starting with '##TITLE', and sometimes end with '##END=' (though not always).  Entries may not have empty lines between them, either, so use the '##TITLE' fields as reference points to split the specra.
+        Splits the spectra found in a JCAMP-DX file.  Individual spectra typically start with a line
+        starting with '##TITLE', and sometimes end with '##END=' (though not always).  Entries may
+        not have empty lines between them, either, so this function uses the '##TITLE' fields as the
+        sole reference points to split the specra.
         """
         if self.spectrum_delimiter is not None:
             return file_text.split(self.spectrum_delimiter)
-        else:
-            # go from ##TITLE to ##TITLE
-            title_indices = []
-            title_index = file_text.find("##TITLE")
 
-            # if first ##TITLE index is -1, then this isn't following the JCAMP format (enough)
-            if title_index == -1:
-                raise ValueError("Unable to process file text -- ##TITLE field is not present in document, which is necessary if there is no spectrum delimiter set.")
+        # go from ##TITLE to ##TITLE
+        title_indices = []
+        title_index = file_text.find("##TITLE")
 
-            while title_index != -1:
-                title_indices.append(title_index)
-                title_index = file_text.find("##TITLE", title_index+1)
-            
-            title_indices.append(len(file_text))
-            
-            return [file_text[a:b].strip() for a, b in zip(title_indices[:-1], title_indices[1:])]
+        # if first ##TITLE index is -1, then this isn't following the JCAMP format (enough)
+        if title_index == -1:
+            raise ValueError("Unable to process file text -- ##TITLE field is not present in document, which is necessary if there is no spectrum delimiter set.")
+
+        while title_index != -1:
+            title_indices.append(title_index)
+            title_index = file_text.find("##TITLE", title_index+1)
+
+        title_indices.append(len(file_text))
+
+        return [file_text[a:b].strip() for a, b in zip(title_indices[:-1], title_indices[1:])]
