@@ -95,7 +95,7 @@ class MSPFileProcessor(MassSpectrumFileProcessor):
                 spectrum = np.empty((0,2))
             else:
                 spectrum_lines = lines[spectrum_start_line:(spectrum_start_line + num_peaks + 1)]
-                spectrum = self._process_spectrum_lines(spectrum_lines)
+                spectrum = self.process_spectrum_lines(spectrum_lines)
             spectrum_object = MassSpectrum(fields=fields, spectrum=spectrum)
             if self.max_intensity:
                 spectrum_object.rescale_spectrum(self.max_intensity)

@@ -70,10 +70,9 @@ class MassSpectrumLibrary():
     def count_field_values(self, field_name):
         """
         Returns a list of all values found in the specified field.  Note that spectra without the
-        field and spectra with the field but with a null value will be counted together under the
-        'None' key.
+        field will not be counted.
         """
-        values = [s.fields.get(field_name, None) for s in self.spectra]
+        values = [s.fields.get(field_name, None) for s in self.spectra if field_name in s.fields]
         return Counter(values)
 
 
@@ -91,7 +90,7 @@ class MassSpectrumFileProcessor():
         self.peak_delimiter = peak_delimiter
         self.max_intensity = max_intensity
 
-    def _process_spectrum_lines(self, spectrum_lines):
+    def process_spectrum_lines(self, spectrum_lines):
         """
         Translates a list of lines with one m/z-intensity pair each into a mass spectrum.
         """

@@ -1,5 +1,5 @@
 """
-Tests specifically for the MSP file reader.
+Tests specifically for the MSP file processor.
 """
 
 import pytest
@@ -13,11 +13,13 @@ def good_test_file_fixture():
         return f.read()
 
 def test_read_good_file(good_test_file):
+    """Basic check for whether the processor reads a file correctly."""
     reader = MSPFileProcessor(keep_empty_fields=True, num_peaks_text="Num_Peaks")
     library = reader.process_file(good_test_file)
     assert len(library.spectra) == 3
 
 def test_filter_null_fields(good_test_file):
+    """Tests whether the keep_empty_fields filter works correctly."""
     reader1 = MSPFileProcessor(keep_empty_fields=True, num_peaks_text="Num_Peaks")
     library1 = reader1.process_file(good_test_file)
     field_counts1 = library1.count_all_fields()
@@ -29,6 +31,9 @@ def test_filter_null_fields(good_test_file):
     assert field_counts2["InChIKey"] == 2
 
 def test_count_field_values(good_test_file):
+    """
+    Tests the counting of field values.
+    """
     reader = MSPFileProcessor(keep_empty_fields=True, num_peaks_text="Num_Peaks")
     library = reader.process_file(good_test_file)
     ion_modes = library.count_field_values("Ion Mode")

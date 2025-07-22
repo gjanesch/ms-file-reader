@@ -101,10 +101,10 @@ class JCAMPFileProcessor(MassSpectrumFileProcessor):
                         all_peaks.extend(line_peaks)
                     else:
                         break
-                spectrum = self._process_spectrum_lines(all_peaks)
+                spectrum = self.process_spectrum_lines(all_peaks)
             else:
                 spectrum_lines = lines[spectrum_start_line:(spectrum_start_line + num_peaks)]
-                spectrum = self._process_spectrum_lines(spectrum_lines)
+                spectrum = self.process_spectrum_lines(spectrum_lines)
 
             spectrum_object = MassSpectrum(fields=fields, spectrum=spectrum)
             if self.max_intensity:

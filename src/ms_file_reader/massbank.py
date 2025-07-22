@@ -80,7 +80,7 @@ class MassBankFileProcessor(MassSpectrumFileProcessor):
 
         spectrum_start_line = 1 + next(n for n,l in enumerate(lines) if l.startswith("PK$PEAK"))
         spectrum_lines = lines[spectrum_start_line:(spectrum_start_line + num_peaks)]
-        spectrum = self._process_spectrum_lines(spectrum_lines)
+        spectrum = self.process_spectrum_lines(spectrum_lines)
 
         return MassSpectrum(fields=fields, spectrum=spectrum)
 

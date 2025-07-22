@@ -17,6 +17,7 @@ def good_test_file1_fixture():
 
 
 def test_read_good_file(good_test_file1):
+    """Basic check for whether the processor reads a file correctly."""
     reader = MassBankFileProcessor()
     spectrum = reader.process_file(good_test_file1)
     assert len(spectrum.spectrum) == 17
