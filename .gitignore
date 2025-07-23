@@ -1,8 +1,4 @@
 build/**
-src/ms_file_reader.egg-info/**
-tests/__pycache__/**
-tests/test_files/msp/BERKELEY-LAB.msp
-tests/test_files/mzml/**
-tests/test_files/mzxml/**
+unused files/**
 venv/**
 *.pyc
