@@ -17,10 +17,10 @@ https://github.com/MassBank/MassBank-web/blob/main/Documentation/MassBankRecordF
 
 # import warnings
 
-from ms_file_reader.common_ms import MassSpectrum, MassSpectrumFileProcessor
+from ms_file_reader.common_ms import MassSpectrum, MassSpectrumFileReader
 
 
-class MassBankFileProcessor(MassSpectrumFileProcessor):
+class MassBankFileReader(MassSpectrumFileReader):
 
     """
     Class for a file processor for files from MassBank EU or conforming to its standards.

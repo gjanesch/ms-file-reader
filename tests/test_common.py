@@ -5,7 +5,7 @@ Tests for the classes that underlie the file-type-specific processors.
 import numpy as np
 import pytest
 
-from ms_file_reader.common_ms import MassSpectrum, MassSpectrumLibrary, MassSpectrumFileProcessor
+from ms_file_reader.common_ms import MassSpectrum, MassSpectrumLibrary, MassSpectrumFileReader
 
 @pytest.fixture(name="quick_test_library", scope="module")
 def quick_test_library_fixture():
@@ -42,13 +42,13 @@ def test_field_value_count(quick_test_library):
 def test_processor_good_input():
     """Tests the processing of a list of strings into a NumPy array for the spectrum."""
     good_input = ["1 14 9.7", "2 24 13.8", "5 33 16.9"]
-    processor = MassSpectrumFileProcessor(mz_field=0, intensity_field=2)
+    processor = MassSpectrumFileReader(mz_field=0, intensity_field=2)
     spectrum = processor.process_spectrum_lines(good_input)
     assert np.all(spectrum == np.array([[1, 9.7], [2, 13.8], [5, 16.9]]))
 
 def test_processor_bad_number_of_entries():
     """Tests whether an error is thrown for a bad number of entries in a spectrum peak."""
     bad_input = ["1 14 9.7", "2 24", "5 33 16.9"]
-    processor = MassSpectrumFileProcessor(mz_field=0, intensity_field=2)
+    processor = MassSpectrumFileReader(mz_field=0, intensity_field=2)
     with pytest.raises(ValueError):
         processor.process_spectrum_lines(bad_input)

@@ -76,7 +76,7 @@ class MassSpectrumLibrary():
         return Counter(values)
 
 
-class MassSpectrumFileProcessor():
+class MassSpectrumFileReader():
     """
     Class containing common operations for mass spectrum file processors.  Children of this class
     are intended to be file type readers.

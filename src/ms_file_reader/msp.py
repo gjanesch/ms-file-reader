@@ -8,10 +8,10 @@ import warnings
 
 import numpy as np
 
-from ms_file_reader.common_ms import MassSpectrum, MassSpectrumFileProcessor, MassSpectrumLibrary
+from ms_file_reader.common_ms import MassSpectrum, MassSpectrumFileReader, MassSpectrumLibrary
 
 
-class MSPFileProcessor(MassSpectrumFileProcessor):
+class MSPFileReader(MassSpectrumFileReader):
     """
     This class is for taking the contents of a mass spectral .msp file and performing
     some basic extraction of the spectra inside.  This is currently assuming that the

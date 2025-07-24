@@ -13,9 +13,9 @@ Feedback on other real-world edge cases is welcome.
 To import the individual readers:
 
 ```
-from ms_file_reader.jcamp import JCAMPFileProcessor
-from ms_file_reader.massbank import MassBankFileProcessor
-from ms_file_reader.msp import MSPFileProcessor
+from ms_file_reader.jcamp import JCAMPFileReader
+from ms_file_reader.massbank import MassBankFileReader
+from ms_file_reader.msp import MSPFileReader
 ```
 
 The individual readers -- mostly the ones for JCAMP-DX and MSP -- come with options for trying to deal with any non-standardness of files; see the docstrings for argument details.  Processing is done by a `process_file()` method associated with each class.  The method acts on text objects instead of file handles or paths, so the content of a file has to be read in first.
@@ -23,10 +23,10 @@ The individual readers -- mostly the ones for JCAMP-DX and MSP -- come with opti
 A basic example:
 
 ```
-from ms_file_reader.msp import MSPFileProcessor
+from ms_file_reader.msp import MSPFileReader
 with open("test.msp", "r", encoding="utf-8") as f:
     file_text = f.read()
 
-reader = MSPFileProcessor(keep_empty_fields=False, max_intensity=100)
+reader = MSPFileReader(keep_empty_fields=False, max_intensity=100)
 spectrum_library = reader.process_file(file_text)
 ```

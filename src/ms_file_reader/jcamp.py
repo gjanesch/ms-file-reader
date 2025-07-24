@@ -10,10 +10,10 @@ import warnings
 
 import numpy as np
 
-from ms_file_reader.common_ms import MassSpectrum, MassSpectrumFileProcessor, MassSpectrumLibrary
+from ms_file_reader.common_ms import MassSpectrum, MassSpectrumFileReader, MassSpectrumLibrary
 
 
-class JCAMPFileProcessor(MassSpectrumFileProcessor):
+class JCAMPFileReader(MassSpectrumFileReader):
     """
     Class used to process a mass spectral file in the JCAMP-DX format and output a library of
     spectra.
