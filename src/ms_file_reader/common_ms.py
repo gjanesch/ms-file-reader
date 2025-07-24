@@ -37,6 +37,10 @@ class MassSpectrum():
         self.spectrum[:,1] = self.spectrum[:,1] * new_max / current_max
 
 
+    def __repr__(self):
+        return f"Mass spectrum with {self.spectrum.shape[0]} peaks and {len(self.list_fields())} fields."
+
+
 
 class MassSpectrumLibrary():
     """
@@ -74,6 +78,12 @@ class MassSpectrumLibrary():
         """
         values = [s.fields.get(field_name, None) for s in self.spectra if field_name in s.fields]
         return Counter(values)
+    
+
+    def __repr__(self):
+        count = len(self.spectra)
+        return f"Mass spectrum library containing {count} spectr{'a' if count > 1 else 'um'}."
+
 
 
 class MassSpectrumFileReader():
@@ -82,13 +92,34 @@ class MassSpectrumFileReader():
     are intended to be file type readers.
         
     Leaving the delimiter as None will split on arbitrary whitespace.
+
+    Arguments:
+    - intensity_field -- In the peak list, this is the zero-indexed field that contains the peak's
+    intensity.  Default is 1 for the second value on the line.
+    - max_intensity -- If supplied, all spectra in the library will have their peaks' intensities
+    rescaled so that max_intensity is the largest value.
+    - mz_field -- In the peak list, this is the zero-indexed field that contains the peak's m/z
+    value.  Default is 0 for the first value on the line.
+    - peak_delimiter -- Delimiter between the m/z and intensity values for a peak.  Leaving as None
+    splits on any non-line-breaking whitespace.
     """
 
     def __init__(self, peak_delimiter=None, mz_field=0, intensity_field=1, max_intensity=None):
-        self.mz_field = mz_field
         self.intensity_field = intensity_field
-        self.peak_delimiter = peak_delimiter
         self.max_intensity = max_intensity
+        self.mz_field = mz_field
+        self.peak_delimiter = peak_delimiter
+
+
+    def __repr__(self):
+        return (
+            "MassSpectrumFileReader(\n"
+            f"  intensity_field={self.intensity_field}\n"
+            f"  max_intensity={self.max_intensity}\n"
+            f"  mz_field={self.mz_field}\n"
+            f"  peak_delimiter={self.peak_delimiter}\n"
+            ")"
+        )
 
     def process_spectrum_lines(self, spectrum_lines):
         """

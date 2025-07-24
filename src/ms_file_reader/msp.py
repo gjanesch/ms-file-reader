@@ -53,6 +53,20 @@ class MSPFileReader(MassSpectrumFileReader):
         self.spectrum_delimiter = spectrum_delimiter
 
 
+    def __repr__(self):
+        return (
+            "MSPFileReader(\n"
+            f"  intensity_field={self.intensity_field}\n"
+            f"  keep_empty_fields={self.keep_empty_fields}\n"
+            f"  max_intensity={self.max_intensity}\n"
+            f"  mz_field={self.mz_field}\n"
+            f"  num_peaks_text={self.num_peaks_text}\n"
+            f"  peak_delimiter={self.peak_delimiter}\n"
+            f"  spectrum_delimiter={self.spectrum_delimiter}\n"
+            ")"
+        )
+
+
     def process_file(self, file_text):
         """
         Processes the text of a JCAMP-DX file into a library of mass spectra.  Outputs a

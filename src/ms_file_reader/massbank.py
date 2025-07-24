@@ -48,6 +48,15 @@ class MassBankFileReader(MassSpectrumFileReader):
         self.validate_files = validate_files
 
 
+    def __repr__(self):
+        return (
+            "MassBankFileReader(\n"
+            f"  max_intensity={self.max_intensity}\n"
+            f"  validate_files={self.validate_files}\n"
+            ")"
+        )
+
+
     def process_file(self, file_text):
         """
         Processes the text of a MassBank EU file into a mass spectrum object containing the file's
@@ -104,7 +113,11 @@ class MassBankFileReader(MassSpectrumFileReader):
         Does some validation of the structure of a text file to see if it matches MassBank EU's
         format.  Currently unused.
         """
-        REQUIRED_FIELDS = ["ACCESSION", "RECORD_TITLE", "DATE", "AUTHORS", "LICENSE", "CH$NAME", "CH$COMPOUND_CLASS", "CH$FORMULA", "CH$EXACT_MASS", "CH$SMILES", "CH$IUPAC", "AC$INSTRUMENT", "AC$INSTRUMENT_TYPE", "PK$SPLASH", "PK$NUM_PEAK", "PK$PEAK"]
+        REQUIRED_FIELDS = [
+            "ACCESSION", "RECORD_TITLE", "DATE", "AUTHORS", "LICENSE", "CH$NAME",
+            "CH$COMPOUND_CLASS", "CH$FORMULA", "CH$EXACT_MASS", "CH$SMILES", "CH$IUPAC",
+            "AC$INSTRUMENT", "AC$INSTRUMENT_TYPE", "PK$SPLASH", "PK$NUM_PEAK", "PK$PEAK"
+        ]
 
         field_names = {x.split(":")[0] for x in file_text.split("\n")}
         for rf in REQUIRED_FIELDS:
