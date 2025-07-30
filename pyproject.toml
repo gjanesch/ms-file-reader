@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "ms_file_reader"
-version = "0.1.0"
+version = "0.1.1"
 authors = [{name = "Gregory Janesch"}]
 description = "Reads a few common file formats for processed mass spectra and generates consistent objects from them."
 readme = "README.md"

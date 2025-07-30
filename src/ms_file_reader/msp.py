@@ -60,9 +60,9 @@ class MSPFileReader(MassSpectrumFileReader):
             f"  keep_empty_fields={self.keep_empty_fields}\n"
             f"  max_intensity={self.max_intensity}\n"
             f"  mz_field={self.mz_field}\n"
-            f"  num_peaks_text={self.num_peaks_text}\n"
-            f"  peak_delimiter={self.peak_delimiter}\n"
-            f"  spectrum_delimiter={self.spectrum_delimiter}\n"
+            f"  num_peaks_text={repr(self.num_peaks_text)}\n"
+            f"  peak_delimiter={repr(self.peak_delimiter)}\n"
+            f"  spectrum_delimiter={repr(self.spectrum_delimiter)}\n"
             ")"
         )
 

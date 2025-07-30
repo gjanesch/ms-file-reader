@@ -1,4 +1,6 @@
 build/**
+dist/**
+src/ms_file_reader.egg-info/**
 unused files/**
 venv/**
 *.pyc

@@ -10,6 +10,12 @@ Feedback on other real-world edge cases is welcome.
 
 # Usage
 
+Install from PyPI:
+
+```
+pip install ms-file-reader
+```
+
 To import the individual readers:
 
 ```

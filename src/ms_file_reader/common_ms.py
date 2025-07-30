@@ -117,7 +117,7 @@ class MassSpectrumFileReader():
             f"  intensity_field={self.intensity_field}\n"
             f"  max_intensity={self.max_intensity}\n"
             f"  mz_field={self.mz_field}\n"
-            f"  peak_delimiter={self.peak_delimiter}\n"
+            f"  peak_delimiter='{repr(self.peak_delimiter)}'\n"
             ")"
         )
 
@@ -127,6 +127,6 @@ class MassSpectrumFileReader():
         """
         split_lines = [sl.split(self.peak_delimiter) for sl in spectrum_lines]
         min_number_of_fields = 1 + max(self.mz_field, self.intensity_field)
-        if any([len(vals) < min_number_of_fields for vals in split_lines]):
+        if any(len(vals) < min_number_of_fields for vals in split_lines):
             raise ValueError(f"At least one line of the spectrum has too few values; expecting at least {min_number_of_fields} in each line.")
         return np.array([[float(l[self.mz_field]), float(l[self.intensity_field])] for l in split_lines])

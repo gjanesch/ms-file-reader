@@ -52,12 +52,12 @@ class JCAMPFileReader(MassSpectrumFileReader):
     def __repr__(self):
         return (
             "JCAMPFileReader(\n"
-            f"  interpeak_delimiter={self.interpeak_delimiter}\n"
+            f"  interpeak_delimiter={repr(self.interpeak_delimiter)}\n"
             f"  keep_empty_fields={self.keep_empty_fields}\n"
             f"  keep_symbol_prefixes={self.keep_symbol_prefixes}\n"
             f"  max_intensity={self.max_intensity}\n"
-            f"  peak_delimiter={self.peak_delimiter}\n"
-            f"  spectrum_delimiter={self.spectrum_delimiter}\n"
+            f"  peak_delimiter={repr(self.peak_delimiter)}\n"
+            f"  spectrum_delimiter={repr(self.spectrum_delimiter)}\n"
             ")"
         )
 
