@@ -15,6 +15,7 @@ Specification of the format is available at
 https://github.com/MassBank/MassBank-web/blob/main/Documentation/MassBankRecordFormat.md
 """
 
+import re
 # import warnings
 
 from ms_file_reader.common_ms import MassSpectrum, MassSpectrumFileReader
@@ -64,6 +65,7 @@ class MassBankFileReader(MassSpectrumFileReader):
         """
         fields = {}
         names = []
+        solvents = []
 
         lines = [l.strip() for l in file_text.split("\n")]
 
@@ -72,17 +74,24 @@ class MassBankFileReader(MassSpectrumFileReader):
                 break
 
             field_name, value = l.split(":", maxsplit=1)
+            value = value.strip()
             if field_name in self.LINK_FIELDS:
                 field_name, value = self._process_subtag_line(value.strip())
             elif field_name in self.INFO_FIELDS:
-                field_prefix = field_name.split("$")[1]
-                field_name, value = self._process_subtag_line(value.strip(), field_prefix)
+                if value.startswith("SOLVENT"):
+                    current_solvent = re.match(r"^SOLVENT\s([A-Z]\s)?(.*)$", value).groups()[1]
+                    solvents.append(current_solvent)
+                else:
+                    field_prefix = field_name.split("$")[1]
+                    field_name, value = self._process_subtag_line(value.strip(), field_prefix)
             elif field_name == "CH$NAME":
                 names.append(value)
 
             fields[field_name] = value
 
         fields["NAME"] = names
+        if len(solvents) > 0:
+            fields["CHROMATOGRAPHY - SOLVENT"] = solvents
 
         peak_count_line = next(l for l in lines if l.startswith("PK$NUM_PEAK"))
         num_peaks = int(peak_count_line.split(":")[1])
